@@ -4,1130 +4,401 @@
     <base target="_self">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TasklyMeet — Early Access</title>
-    <meta name="description" content="Automatically generate meeting summaries and actionable tasks. Get early access to TasklyMeet.">
+    <title>TasklyMeet — Turn Meetings Into Action, Automatically</title>
+    <meta name="description" content="AI meeting assistant that automatically generates summaries and creates actionable tasks. Stop taking notes. Leave every meeting with clarity.">
+    <meta property="og:title" content="TasklyMeet — Turn Meetings Into Action">
+    <meta property="og:description" content="AI-powered meeting intelligence that creates tasks, summaries, and keeps your team aligned.">
+    <meta property="og:type" content="website">
+
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        primary: "#6A80FE",
-                        secondary: "#4A5FCC",
-                        accent: "#8A9DFF",
-                        light: "#F8F9FF",
-                        dark: "#1A1F36"
+                        ink:    '#0D0F1A',
+                        indigo: '#4F62FF',
+                        violet: '#7C5CFC',
+                        mist:   '#F4F5FF',
+                        slate:  '#6B7280',
                     },
                     fontFamily: {
-                        'sans': ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
-                        'mono': ['Space Mono', 'monospace'],
+                        display: ['"Syne"', 'sans-serif'],
+                        body:    ['"DM Sans"', 'sans-serif'],
+                        mono:    ['"JetBrains Mono"', 'monospace'],
                     },
-                    boxShadow: {
-                        'soft': '0 4px 20px rgba(106, 128, 254, 0.1)',
-                        'medium': '0 8px 30px rgba(106, 128, 254, 0.15)',
-                        'hard': '0 12px 40px rgba(106, 128, 254, 0.2)',
-                        'glow': '0 0 40px rgba(106, 128, 254, 0.35)',
-                    },
-                    backgroundImage: {
-                        'gradient-primary': 'linear-gradient(135deg, #6A80FE 0%, #8A9DFF 100%)',
-                        'gradient-light': 'linear-gradient(135deg, #F8F9FF 0%, #FFFFFF 100%)',
-                        'gradient-card': 'linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(248,249,255,0.9) 100%)',
-                    }
                 }
             }
         }
     </script>
-    <style>
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background: linear-gradient(135deg, #F8F9FF 0%, #FFFFFF 50%, #F0F2FF 100%);
-            background-attachment: fixed;
-        }
 
-        .pattern-bg {
-            background-image: radial-gradient(#6A80FE 1px, transparent 1px);
-            background-size: 28px 28px;
-            opacity: 0.04;
-        }
-
-        .card-hover {
-            transition: all 0.3s ease;
-        }
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(106, 128, 254, 0.2);
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #6A80FE 0%, #8A9DFF 100%);
-            transition: all 0.3s ease;
-        }
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #5A70EE 0%, #7A8DEF 100%);
-            box-shadow: 0 8px 25px rgba(106, 128, 254, 0.35);
-            transform: translateY(-2px);
-        }
-
-        .btn-outline {
-            border: 2px solid #6A80FE;
-            transition: all 0.3s ease;
-        }
-        .btn-outline:hover {
-            background: #6A80FE;
-            color: white;
-            transform: translateY(-2px);
-        }
-
-        .feature-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, rgba(106,128,254,0.1) 0%, rgba(138,157,255,0.1) 100%);
-            border: 2px solid rgba(106,128,254,0.2);
-        }
-
-        .step-number {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #6A80FE 0%, #8A9DFF 100%);
-            color: white;
-            font-weight: 700;
-        }
-
-        /* ======== EARLY ACCESS SECTION ======== */
-        .ea-section {
-            background: linear-gradient(135deg, #6A80FE 0%, #5566DD 50%, #4A5FCC 100%);
-            position: relative;
-            overflow: hidden;
-        }
-        .ea-section::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-image: radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px);
-            background-size: 24px 24px;
-        }
-        .ea-badge {
-            background: rgba(255,255,255,0.15);
-            border: 1px solid rgba(255,255,255,0.25);
-            backdrop-filter: blur(10px);
-        }
-        .email-input {
-            background: rgba(255,255,255,0.12);
-            border: 1.5px solid rgba(255,255,255,0.3);
-            color: white;
-            transition: all 0.3s;
-            backdrop-filter: blur(10px);
-        }
-        .email-input::placeholder { color: rgba(255,255,255,0.55); }
-        .email-input:focus {
-            outline: none;
-            border-color: rgba(255,255,255,0.7);
-            background: rgba(255,255,255,0.18);
-            box-shadow: 0 0 0 4px rgba(255,255,255,0.1);
-        }
-        .ea-btn {
-            background: white;
-            color: #6A80FE;
-            font-weight: 700;
-            transition: all 0.3s;
-        }
-        .ea-btn:hover {
-            background: #f0f2ff;
-            transform: translateY(-1px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-        }
-
-        /* ======== MOCKUP CAROUSEL ======== */
-        .mockup-track {
-            display: flex;
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .mockup-slide {
-            min-width: 100%;
-        }
-        .mockup-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 4px;
-            background: rgba(106,128,254,0.25);
-            transition: all 0.4s;
-            cursor: pointer;
-        }
-        .mockup-dot.active {
-            width: 28px;
-            background: #6A80FE;
-        }
-
-        /* ======== UI MOCKUP COMPONENTS ======== */
-        .mock-window {
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 20px 60px rgba(106,128,254,0.18);
-            border: 1px solid rgba(106,128,254,0.1);
-            overflow: hidden;
-        }
-        .mock-titlebar {
-            background: #F8F9FF;
-            border-bottom: 1px solid #eef0fb;
-            padding: 12px 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .mock-dot { width: 10px; height: 10px; border-radius: 50%; }
-        .mock-task-row {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 0;
-            border-bottom: 1px solid #f3f4f8;
-            font-size: 13px;
-        }
-        .mock-avatar {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 11px;
-            font-weight: 700;
-            color: white;
-            flex-shrink: 0;
-        }
-        .mock-checkbox {
-            width: 16px;
-            height: 16px;
-            border-radius: 4px;
-            border: 2px solid #6A80FE;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .mock-badge {
-            font-size: 10px;
-            padding: 2px 8px;
-            border-radius: 99px;
-            font-weight: 600;
-            white-space: nowrap;
-        }
-        .mock-ai-line {
-            height: 8px;
-            border-radius: 4px;
-            background: linear-gradient(90deg, #e8eaff, #c8ccf8, #e8eaff);
-            background-size: 200% 100%;
-            animation: shimmer 2s infinite;
-        }
-        @keyframes shimmer {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-
-        /* pulse dot for recording */
-        .rec-dot {
-            width: 8px; height: 8px; border-radius: 50%;
-            background: #ef4444;
-            animation: pulseDot 1.4s ease-in-out infinite;
-        }
-        @keyframes pulseDot {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.4; transform: scale(0.8); }
-        }
-
-        /* waveform bars */
-        .wave-bar {
-            width: 3px;
-            border-radius: 2px;
-            background: #6A80FE;
-            animation: wave 1s ease-in-out infinite alternate;
-        }
-        @keyframes wave {
-            from { transform: scaleY(0.3); }
-            to { transform: scaleY(1); }
-        }
-
-        /* ======== TOAST ======== */
-        #toast {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            z-index: 9999;
-            transform: translateY(100px);
-            opacity: 0;
-            transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
-        }
-        #toast.show {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        /* ======== FLOAT ANIMATIONS ======== */
-        @keyframes floatY {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-8px); }
-        }
-        .float-anim { animation: floatY 4s ease-in-out infinite; }
-        .float-anim-slow { animation: floatY 6s ease-in-out infinite; }
-        .float-anim-slower { animation: floatY 8s ease-in-out infinite; }
-
-        /* ======== FADE IN ON SCROLL ======== */
-        .reveal {
-            opacity: 0;
-            transform: translateY(24px);
-            transition: all 0.6s ease;
-        }
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* counter badge on EA section */
-        .counter-pill {
-            background: rgba(255,255,255,0.12);
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body class="min-h-screen text-gray-800">
-    <!-- Background pattern -->
-    <div class="pattern-bg fixed inset-0 pointer-events-none z-0"></div>
+<body>
 
-    <!-- Header/Navigation -->
-    <header class="relative z-10 bg-white/80 backdrop-blur-sm border-b border-gray-100 sticky top-0">
-        <nav class="container mx-auto px-4 py-4">
-            <div class="flex justify-between items-center">
-                <div class="flex items-center space-x-2">
-                    <div class="w-8 h-8 rounded-lg bg-gradient-primary flex items-center justify-center">
-                        <span class="text-white font-bold text-lg">T</span>
-                    </div>
-                    <span class="text-xl font-bold text-dark">Taskly<span class="text-primary">Meet</span></span>
-                    <span class="ml-2 text-xs font-mono bg-primary/10 text-primary border border-primary/20 px-2 py-0.5 rounded-full">BETA SOON</span>
-                </div>
+<!-- ======== HEADER ======== -->
+<header id="site-header">
+    <nav class="header-inner container mx-auto px-6">
+        <a href="#" class="logo-wrap">
+            <div class="logo-icon">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M2 9L7 14L16 4" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <span class="logo-text">Taskly<span>Meet</span></span>
+            <span class="beta-chip">BETA</span>
+        </a>
 
-                <ul id="nav-menu" class="hidden md:flex items-center space-x-8"></ul>
+        <ul class="nav-links" id="nav-menu"></ul>
 
-                <div class="flex items-center space-x-4">
-                    <a href="#early-access" class="btn-primary px-6 py-2 rounded-lg font-semibold text-white hidden md:inline-block text-sm">Get Early Access</a>
-                    <button id="mobile-menu-toggle" class="md:hidden text-gray-600">
-                        <i class="fas fa-bars text-xl"></i>
-                    </button>
-                </div>
+        <div class="header-actions">
+            <a href="#early-access" class="btn-cta">Get Early Access</a>
+            <button id="mobile-menu-toggle" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <div id="mobile-menu">
+        <ul id="mobile-nav-menu"></ul>
+        <a href="#early-access" class="btn-cta mobile-cta">Get Early Access</a>
+    </div>
+</header>
+
+<main>
+
+<!-- ======== HERO ======== -->
+<section class="hero-section" id="hero">
+    <div class="hero-bg-grid"></div>
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+
+    <div class="container mx-auto px-6 hero-inner">
+        <div class="hero-left">
+            <div class="announce-pill reveal">
+                <span class="rec-dot"></span>
+                Join 340+ teams already on the waitlist
             </div>
 
-            <div id="mobile-menu" class="md:hidden mt-4 hidden">
-                <ul id="mobile-nav-menu" class="space-y-4"></ul>
-                <div class="mt-6">
-                    <a href="#early-access" class="btn-primary px-6 py-3 rounded-lg font-semibold text-white w-full text-center block">Get Early Access</a>
-                </div>
+            <h1 class="hero-heading reveal" style="--delay:.1s">
+                Turn Your Meetings<br>Into <em>Action</em><br>Automatically
+            </h1>
+
+            <p class="hero-sub reveal" style="--delay:.2s">
+                AI captures every decision, assigns tasks to the right people, and syncs with your tools. So your team leaves every call knowing exactly what happens next.
+            </p>
+
+            <div class="hero-ctas reveal" style="--delay:.3s">
+                <a href="#early-access" class="btn-primary">Get Early Access →</a>
+                <a href="#how-it-works" class="btn-ghost">See How It Works</a>
             </div>
-        </nav>
-    </header>
 
-    <main class="relative z-10">
-
-        <!-- ======== HERO ======== -->
-        <section class="container mx-auto px-4 py-14 md:py-22">
-            <div class="flex flex-col lg:flex-row items-center gap-12">
-                <div class="lg:w-1/2">
-                    <div class="inline-flex items-center gap-2 bg-primary/8 border border-primary/20 text-primary text-sm font-semibold px-4 py-2 rounded-full mb-6">
-                        <span class="rec-dot"></span>
-                        Coming Soon — Join the Waitlist
-                    </div>
-                    <h1 class="text-4xl md:text-5xl lg:text-[58px] font-bold text-dark leading-tight mb-6">
-                        Turn Your Meetings<br>into <span class="text-primary">Action</span>
-                    </h1>
-                    <p class="text-xl text-gray-600 mb-8 max-w-lg leading-relaxed">
-                        AI automatically generates summaries and actionable tasks from your meetings. Stop taking notes. Start shipping.
-                    </p>
-                    <div class="flex flex-col sm:flex-row gap-4">
-                        <a href="#early-access" class="btn-primary px-8 py-4 rounded-xl font-bold text-white text-center shadow-medium">Get Early Access →</a>
-                        <a href="#how-it-works" class="px-8 py-4 rounded-xl font-semibold text-primary border-2 border-primary text-center btn-outline">See How It Works</a>
-                    </div>
-                    <div class="mt-10 flex items-center gap-6 flex-wrap">
-                        <div class="flex -space-x-2">
-                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 border-2 border-white flex items-center justify-center text-white text-xs font-bold">A</div>
-                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 border-2 border-white flex items-center justify-center text-white text-xs font-bold">M</div>
-                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-pink-400 to-rose-500 border-2 border-white flex items-center justify-center text-white text-xs font-bold">S</div>
-                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 border-2 border-white flex items-center justify-center text-white text-xs font-bold">+</div>
-                        </div>
-                        <span class="text-gray-600 text-sm"><strong class="text-dark">340+</strong> people already on the waitlist</span>
-                    </div>
+            <div class="trust-row reveal" style="--delay:.4s">
+                <div class="avatars">
+                    <div class="av" style="background:linear-gradient(135deg,#667eea,#764ba2)">A</div>
+                    <div class="av" style="background:linear-gradient(135deg,#f093fb,#f5576c)">M</div>
+                    <div class="av" style="background:linear-gradient(135deg,#4facfe,#00f2fe)">S</div>
+                    <div class="av" style="background:linear-gradient(135deg,#43e97b,#38f9d7)">+</div>
                 </div>
+                <span class="trust-text"><strong>340+</strong> founders & product teams on the waitlist</span>
+            </div>
+        </div>
 
-                <div class="lg:w-1/2 w-full">
-                    <div class="relative">
-                        <!-- Main mockup window -->
-                        <div class="mock-window float-anim">
-                            <div class="mock-titlebar">
-                                <div class="mock-dot bg-red-400"></div>
-                                <div class="mock-dot bg-yellow-400"></div>
-                                <div class="mock-dot bg-green-400"></div>
-                                <div class="flex-1 mx-4 h-5 bg-gray-100 rounded-md flex items-center px-3">
-                                    <span class="text-gray-400 text-xs">app.tasklymeet.com</span>
-                                </div>
-                            </div>
-                            <div class="p-5">
-                                <!-- Meeting info bar -->
-                                <div class="flex items-center justify-between mb-5 p-3 bg-primary/5 rounded-xl border border-primary/10">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-9 h-9 rounded-lg bg-gradient-primary flex items-center justify-center">
-                                            <i class="fas fa-video text-white text-sm"></i>
-                                        </div>
-                                        <div>
-                                            <p class="font-bold text-dark text-sm">Weekly Team Sync</p>
-                                            <p class="text-gray-400 text-xs">4 participants · 42 min</p>
-                                        </div>
-                                    </div>
-                                    <div class="flex items-center gap-1.5">
-                                        <div class="rec-dot"></div>
-                                        <span class="text-red-500 text-xs font-mono font-bold">REC</span>
-                                    </div>
-                                </div>
-
-                                <!-- Waveform -->
-                                <div class="flex items-end gap-[3px] h-8 mb-5 px-1">
-                                    <div class="wave-bar h-2" style="animation-delay:0s"></div>
-                                    <div class="wave-bar h-5" style="animation-delay:0.1s"></div>
-                                    <div class="wave-bar h-3" style="animation-delay:0.2s"></div>
-                                    <div class="wave-bar h-7" style="animation-delay:0.15s"></div>
-                                    <div class="wave-bar h-4" style="animation-delay:0.3s"></div>
-                                    <div class="wave-bar h-6" style="animation-delay:0.05s"></div>
-                                    <div class="wave-bar h-2" style="animation-delay:0.25s"></div>
-                                    <div class="wave-bar h-8" style="animation-delay:0.4s"></div>
-                                    <div class="wave-bar h-3" style="animation-delay:0.35s"></div>
-                                    <div class="wave-bar h-5" style="animation-delay:0.1s"></div>
-                                    <div class="wave-bar h-6" style="animation-delay:0.2s"></div>
-                                    <div class="wave-bar h-2" style="animation-delay:0.45s"></div>
-                                    <div class="wave-bar h-7" style="animation-delay:0s"></div>
-                                    <div class="wave-bar h-4" style="animation-delay:0.15s"></div>
-                                    <div class="wave-bar h-5" style="animation-delay:0.3s"></div>
-                                    <div class="wave-bar h-3" style="animation-delay:0.5s"></div>
-                                    <div class="wave-bar h-6" style="animation-delay:0.1s"></div>
-                                    <div class="wave-bar h-8" style="animation-delay:0.2s"></div>
-                                    <div class="wave-bar h-2" style="animation-delay:0.35s"></div>
-                                    <div class="wave-bar h-4" style="animation-delay:0.4s"></div>
-                                </div>
-
-                                <!-- AI generating label -->
-                                <div class="flex items-center gap-2 mb-3">
-                                    <i class="fas fa-robot text-primary text-xs"></i>
-                                    <span class="text-xs font-semibold text-primary">AI generating tasks...</span>
-                                </div>
-
-                                <!-- Task cards -->
-                                <div id="task-cards-preview" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
-                            </div>
-                        </div>
-
-                        <!-- Floating badge -->
-                        <div class="absolute -top-4 -right-4 bg-white rounded-xl px-4 py-2.5 shadow-medium border border-gray-100 float-anim-slow hidden sm:flex items-center gap-2">
-                            <div class="w-7 h-7 rounded-lg bg-green-100 flex items-center justify-center">
-                                <i class="fas fa-check text-green-600 text-xs"></i>
-                            </div>
+        <div class="hero-right reveal" style="--delay:.2s">
+            <div class="mock-float">
+                <div class="mock-window hero-mock">
+                    <div class="mock-bar">
+                        <div class="mock-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+                        <div class="mock-url">app.tasklymeet.com</div>
+                    </div>
+                    <div class="mock-body">
+                        <div class="meeting-row">
+                            <div class="meeting-icon"><i class="fas fa-video"></i></div>
                             <div>
-                                <p class="text-xs font-bold text-dark">Summary ready</p>
-                                <p class="text-xs text-gray-400">3 tasks created</p>
+                                <div class="meeting-title">Weekly Team Sync</div>
+                                <div class="meeting-meta">4 participants · 42 min</div>
                             </div>
+                            <div class="rec-pill"><span class="rec-dot"></span> REC</div>
                         </div>
 
-                        <!-- Floating integration badge -->
-                        <div class="absolute -bottom-4 -left-4 bg-white rounded-xl px-4 py-2.5 shadow-medium border border-gray-100 float-anim-slower hidden sm:flex items-center gap-2">
-                            <div class="flex -space-x-1">
-                                <div class="w-5 h-5 rounded bg-blue-500 flex items-center justify-center"><i class="fab fa-slack text-white" style="font-size:10px"></i></div>
-                                <div class="w-5 h-5 rounded bg-green-500 flex items-center justify-center"><i class="fas fa-check text-white" style="font-size:8px"></i></div>
-                            </div>
-                            <p class="text-xs font-semibold text-dark">Synced to Slack & Asana</p>
+                        <div class="wave-row">
+                            <div class="wave-bar" style="--h:6px;--d:0s"></div>
+                            <div class="wave-bar" style="--h:16px;--d:.08s"></div>
+                            <div class="wave-bar" style="--h:10px;--d:.16s"></div>
+                            <div class="wave-bar" style="--h:22px;--d:.06s"></div>
+                            <div class="wave-bar" style="--h:14px;--d:.24s"></div>
+                            <div class="wave-bar" style="--h:18px;--d:.12s"></div>
+                            <div class="wave-bar" style="--h:8px;--d:.32s"></div>
+                            <div class="wave-bar" style="--h:26px;--d:.04s"></div>
+                            <div class="wave-bar" style="--h:12px;--d:.2s"></div>
+                            <div class="wave-bar" style="--h:20px;--d:.28s"></div>
+                            <div class="wave-bar" style="--h:16px;--d:.1s"></div>
+                            <div class="wave-bar" style="--h:6px;--d:.36s"></div>
+                            <div class="wave-bar" style="--h:24px;--d:.02s"></div>
+                            <div class="wave-bar" style="--h:14px;--d:.18s"></div>
+                            <div class="wave-bar" style="--h:18px;--d:.26s"></div>
                         </div>
 
-                        <div class="absolute -top-4 -right-4 w-24 h-24 rounded-full bg-accent/20 blur-2xl pointer-events-none"></div>
-                        <div class="absolute -bottom-4 -left-4 w-32 h-32 rounded-full bg-primary/10 blur-2xl pointer-events-none"></div>
+                        <div class="ai-label"><i class="fas fa-sparkles"></i> AI generating tasks...</div>
+
+                        <div id="task-cards-preview" class="task-preview-grid"></div>
                     </div>
+                </div>
+
+                <div class="float-badge badge-top">
+                    <div class="badge-icon ok"><i class="fas fa-check"></i></div>
+                    <div><div class="badge-title">Summary ready</div><div class="badge-sub">3 tasks created</div></div>
+                </div>
+
+                <div class="float-badge badge-bot">
+                    <div class="int-icons">
+                        <div class="int-ic" style="background:#4A154B"><i class="fab fa-slack text-white" style="font-size:9px"></i></div>
+                        <div class="int-ic" style="background:#F06A35"><i class="fas fa-check text-white" style="font-size:7px"></i></div>
+                    </div>
+                    <div class="badge-title">Synced to Slack & Asana</div>
                 </div>
             </div>
-        </section>
-
-        <!-- ======== HOW IT WORKS ======== -->
-        <section id="how-it-works" class="py-16 bg-gradient-light">
-            <div class="container mx-auto px-4">
-                <div class="text-center mb-12 reveal">
-                    <h2 class="text-3xl md:text-4xl font-bold text-dark mb-4">How It Works</h2>
-                    <p class="text-gray-600 text-lg max-w-2xl mx-auto">Three simple steps to transform your meetings into actionable outcomes</p>
-                </div>
-                <div id="steps-container" class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto"></div>
-            </div>
-        </section>
-
-        <!-- ======== FEATURES ======== -->
-        <section id="features" class="py-16">
-            <div class="container mx-auto px-4">
-                <div class="text-center mb-12 reveal">
-                    <h2 class="text-3xl md:text-4xl font-bold text-dark mb-4">Powerful Features</h2>
-                    <p class="text-gray-600 text-lg max-w-2xl mx-auto">Everything you need to make your meetings more productive</p>
-                </div>
-                <div id="features-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"></div>
-            </div>
-        </section>
-
-        <!-- ======== APP SCREENSHOTS ======== -->
-        <section class="py-16 bg-gradient-light">
-            <div class="container mx-auto px-4">
-                <div class="text-center mb-12 reveal">
-                    <h2 class="text-3xl md:text-4xl font-bold text-dark mb-4">See TasklyMeet in Action</h2>
-                    <p class="text-gray-600 text-lg max-w-2xl mx-auto">A beautiful interface built for focus and clarity</p>
-                </div>
-
-                <div class="flex flex-col lg:flex-row items-center gap-12">
-                    <div class="lg:w-1/2 w-full">
-                        <div class="mock-window">
-                            <div class="mock-titlebar">
-                                <div class="mock-dot bg-red-400"></div>
-                                <div class="mock-dot bg-yellow-400"></div>
-                                <div class="mock-dot bg-green-400"></div>
-                                <span class="ml-3 text-xs text-gray-400 font-mono">Dashboard — TasklyMeet</span>
-                            </div>
-                            <div class="p-5">
-                                <!-- Header row -->
-                                <div class="flex items-center justify-between mb-5">
-                                    <div>
-                                        <p class="font-bold text-dark text-sm">October 2025</p>
-                                        <p class="text-xs text-gray-400">12 meetings · 47 tasks</p>
-                                    </div>
-                                    <div class="flex gap-2">
-                                        <div class="h-7 w-20 bg-primary/10 rounded-lg flex items-center justify-center">
-                                            <span class="text-primary text-xs font-semibold">This month</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Stats row -->
-                                <div class="grid grid-cols-3 gap-3 mb-5">
-                                    <div class="bg-primary/5 border border-primary/10 rounded-xl p-3 text-center">
-                                        <p class="text-2xl font-bold text-primary">12</p>
-                                        <p class="text-xs text-gray-500">Meetings</p>
-                                    </div>
-                                    <div class="bg-green-50 border border-green-100 rounded-xl p-3 text-center">
-                                        <p class="text-2xl font-bold text-green-600">38</p>
-                                        <p class="text-xs text-gray-500">Tasks done</p>
-                                    </div>
-                                    <div class="bg-amber-50 border border-amber-100 rounded-xl p-3 text-center">
-                                        <p class="text-2xl font-bold text-amber-600">9</p>
-                                        <p class="text-xs text-gray-500">Pending</p>
-                                    </div>
-                                </div>
-
-                                <!-- Recent tasks list -->
-                                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Recent Tasks</p>
-                                <div class="space-y-1">
-                                    <div class="mock-task-row">
-                                        <div class="mock-checkbox"><i class="fas fa-check text-primary" style="font-size:9px"></i></div>
-                                        <span class="flex-1 text-gray-700 line-through opacity-50">Update Q3 roadmap slides</span>
-                                        <div class="mock-avatar bg-blue-500">SC</div>
-                                    </div>
-                                    <div class="mock-task-row">
-                                        <div class="mock-checkbox"></div>
-                                        <span class="flex-1 text-dark font-medium">Review design mockups</span>
-                                        <span class="mock-badge bg-yellow-100 text-yellow-700">medium</span>
-                                        <div class="mock-avatar bg-purple-500">AR</div>
-                                    </div>
-                                    <div class="mock-task-row">
-                                        <div class="mock-checkbox"></div>
-                                        <span class="flex-1 text-dark font-medium">Schedule client demo call</span>
-                                        <span class="mock-badge bg-red-100 text-red-700">high</span>
-                                        <div class="mock-avatar bg-rose-500">Y</div>
-                                    </div>
-                                    <div class="mock-task-row border-none">
-                                        <div class="mock-checkbox"></div>
-                                        <span class="flex-1 text-dark font-medium">Send onboarding docs</span>
-                                        <span class="mock-badge bg-green-100 text-green-700">low</span>
-                                        <div class="mock-avatar bg-emerald-500">MK</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="lg:w-1/2">
-                        <div class="space-y-8 reveal">
-                            <div class="flex items-start space-x-4">
-                                <div class="feature-icon rounded-xl flex items-center justify-center flex-shrink-0">
-                                    <i class="fas fa-tasks text-primary text-2xl"></i>
-                                </div>
-                                <div>
-                                    <h3 class="text-xl font-bold text-dark mb-2">Smart Task Cards</h3>
-                                    <p class="text-gray-600">Automatically generated tasks with assignees, due dates, and priorities — pulled straight from meeting discussions.</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start space-x-4">
-                                <div class="feature-icon rounded-xl flex items-center justify-center flex-shrink-0">
-                                    <i class="fas fa-chart-line text-primary text-2xl"></i>
-                                </div>
-                                <div>
-                                    <h3 class="text-xl font-bold text-dark mb-2">Analytics Dashboard</h3>
-                                    <p class="text-gray-600">Track meeting productivity, task completion rates, and team performance trends across months.</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start space-x-4">
-                                <div class="feature-icon rounded-xl flex items-center justify-center flex-shrink-0">
-                                    <i class="fas fa-bell text-primary text-2xl"></i>
-                                </div>
-                                <div>
-                                    <h3 class="text-xl font-bold text-dark mb-2">Smart Notifications</h3>
-                                    <p class="text-gray-600">Get timely reminders for upcoming tasks, new meeting summaries, and pending follow-ups.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ======== MOCKUP CAROUSEL (replacing testimonials) ======== -->
-        <section class="py-16">
-            <div class="container mx-auto px-4">
-                <div class="text-center mb-12 reveal">
-                    <h2 class="text-3xl md:text-4xl font-bold text-dark mb-4">Built for Every Team</h2>
-                    <p class="text-gray-600 text-lg max-w-2xl mx-auto">From standups to strategy sessions — TasklyMeet handles it all</p>
-                </div>
-
-                <div class="max-w-4xl mx-auto">
-                    <!-- Carousel wrapper -->
-                    <div class="overflow-hidden rounded-2xl" id="carousel-outer">
-                        <div class="mockup-track" id="mockup-track">
-
-                            <!-- SLIDE 1: Summary view -->
-                            <div class="mockup-slide px-2">
-                                <div class="mock-window">
-                                    <div class="mock-titlebar">
-                                        <div class="mock-dot bg-red-400"></div>
-                                        <div class="mock-dot bg-yellow-400"></div>
-                                        <div class="mock-dot bg-green-400"></div>
-                                        <span class="ml-3 text-xs text-gray-400 font-mono">Meeting Summary — Product Kickoff</span>
-                                    </div>
-                                    <div class="p-6">
-                                        <div class="flex items-start gap-4 mb-6">
-                                            <div class="w-10 h-10 rounded-xl bg-gradient-primary flex items-center justify-center flex-shrink-0">
-                                                <i class="fas fa-robot text-white text-sm"></i>
-                                            </div>
-                                            <div class="flex-1">
-                                                <p class="font-bold text-dark mb-1">AI Summary</p>
-                                                <p class="text-xs text-gray-400 mb-3">Generated in 4 seconds · 100% accurate</p>
-                                                <div class="space-y-2">
-                                                    <div class="mock-ai-line w-full"></div>
-                                                    <div class="mock-ai-line w-4/5"></div>
-                                                    <div class="mock-ai-line w-full"></div>
-                                                    <div class="mock-ai-line w-3/5"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="grid grid-cols-2 gap-3">
-                                            <div class="bg-primary/5 rounded-xl p-3 border border-primary/10">
-                                                <p class="text-xs font-semibold text-primary mb-2"><i class="fas fa-lightbulb mr-1"></i>Key Decisions</p>
-                                                <div class="space-y-1.5">
-                                                    <div class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0"></div><div class="mock-ai-line flex-1 h-2" style="animation-delay:0.3s"></div></div>
-                                                    <div class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0"></div><div class="mock-ai-line flex-1 h-2" style="animation-delay:0.6s"></div></div>
-                                                    <div class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0"></div><div class="mock-ai-line w-2/3 h-2" style="animation-delay:0.9s"></div></div>
-                                                </div>
-                                            </div>
-                                            <div class="bg-green-50 rounded-xl p-3 border border-green-100">
-                                                <p class="text-xs font-semibold text-green-700 mb-2"><i class="fas fa-check-circle mr-1"></i>Action Items</p>
-                                                <div class="space-y-1.5">
-                                                    <div class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0"></div><div class="mock-ai-line flex-1 h-2" style="animation-delay:0.4s; background: linear-gradient(90deg, #d1fae5, #a7f3d0, #d1fae5); background-size:200% 100%;"></div></div>
-                                                    <div class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0"></div><div class="mock-ai-line flex-1 h-2" style="animation-delay:0.7s; background: linear-gradient(90deg, #d1fae5, #a7f3d0, #d1fae5); background-size:200% 100%;"></div></div>
-                                                    <div class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0"></div><div class="mock-ai-line w-1/2 h-2" style="animation-delay:1s; background: linear-gradient(90deg, #d1fae5, #a7f3d0, #d1fae5); background-size:200% 100%;"></div></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <p class="text-center text-gray-500 text-sm mt-4 font-medium">Instant meeting summaries with AI</p>
-                            </div>
-
-                            <!-- SLIDE 2: Integrations view -->
-                            <div class="mockup-slide px-2">
-                                <div class="mock-window">
-                                    <div class="mock-titlebar">
-                                        <div class="mock-dot bg-red-400"></div>
-                                        <div class="mock-dot bg-yellow-400"></div>
-                                        <div class="mock-dot bg-green-400"></div>
-                                        <span class="ml-3 text-xs text-gray-400 font-mono">Integrations — TasklyMeet</span>
-                                    </div>
-                                    <div class="p-6">
-                                        <p class="font-bold text-dark mb-1">Connected Integrations</p>
-                                        <p class="text-xs text-gray-400 mb-5">Tasks sync automatically across all your tools</p>
-                                        <div class="grid grid-cols-3 gap-3">
-                                            <!-- Integration items -->
-                                            <div class="border-2 border-green-200 bg-green-50 rounded-xl p-4 flex flex-col items-center gap-2">
-                                                <div class="w-10 h-10 rounded-xl bg-blue-500 flex items-center justify-center">
-                                                    <i class="fab fa-slack text-white"></i>
-                                                </div>
-                                                <span class="text-xs font-semibold text-dark">Slack</span>
-                                                <span class="text-xs text-green-600 font-semibold">● Connected</span>
-                                            </div>
-                                            <div class="border-2 border-green-200 bg-green-50 rounded-xl p-4 flex flex-col items-center gap-2">
-                                                <div class="w-10 h-10 rounded-xl bg-red-500 flex items-center justify-center">
-                                                    <i class="fas fa-tasks text-white text-sm"></i>
-                                                </div>
-                                                <span class="text-xs font-semibold text-dark">Asana</span>
-                                                <span class="text-xs text-green-600 font-semibold">● Connected</span>
-                                            </div>
-                                            <div class="border border-gray-200 bg-gray-50 rounded-xl p-4 flex flex-col items-center gap-2">
-                                                <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center">
-                                                    <i class="fab fa-jira text-white text-sm"></i>
-                                                </div>
-                                                <span class="text-xs font-semibold text-dark">Jira</span>
-                                                <span class="text-xs text-gray-400">○ Connect</span>
-                                            </div>
-                                            <div class="border-2 border-green-200 bg-green-50 rounded-xl p-4 flex flex-col items-center gap-2">
-                                                <div class="w-10 h-10 rounded-xl bg-green-600 flex items-center justify-center">
-                                                    <i class="fas fa-video text-white text-sm"></i>
-                                                </div>
-                                                <span class="text-xs font-semibold text-dark">Meet</span>
-                                                <span class="text-xs text-green-600 font-semibold">● Connected</span>
-                                            </div>
-                                            <div class="border-2 border-green-200 bg-green-50 rounded-xl p-4 flex flex-col items-center gap-2">
-                                                <div class="w-10 h-10 rounded-xl bg-blue-400 flex items-center justify-center">
-                                                    <i class="fas fa-video text-white text-sm"></i>
-                                                </div>
-                                                <span class="text-xs font-semibold text-dark">Zoom</span>
-                                                <span class="text-xs text-green-600 font-semibold">● Connected</span>
-                                            </div>
-                                            <div class="border border-gray-200 bg-gray-50 rounded-xl p-4 flex flex-col items-center gap-2">
-                                                <div class="w-10 h-10 rounded-xl bg-gray-700 flex items-center justify-center">
-                                                    <i class="fab fa-github text-white text-sm"></i>
-                                                </div>
-                                                <span class="text-xs font-semibold text-dark">GitHub</span>
-                                                <span class="text-xs text-gray-400">○ Connect</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <p class="text-center text-gray-500 text-sm mt-4 font-medium">20+ integrations out of the box</p>
-                            </div>
-
-                            <!-- SLIDE 3: Team collaboration view -->
-                            <div class="mockup-slide px-2">
-                                <div class="mock-window">
-                                    <div class="mock-titlebar">
-                                        <div class="mock-dot bg-red-400"></div>
-                                        <div class="mock-dot bg-yellow-400"></div>
-                                        <div class="mock-dot bg-green-400"></div>
-                                        <span class="ml-3 text-xs text-gray-400 font-mono">Team View — TasklyMeet</span>
-                                    </div>
-                                    <div class="p-6">
-                                        <p class="font-bold text-dark mb-1">Team Performance</p>
-                                        <p class="text-xs text-gray-400 mb-5">Who's on top this week</p>
-                                        <!-- Team member rows -->
-                                        <div class="space-y-3">
-                                            <div class="flex items-center gap-3">
-                                                <div class="mock-avatar bg-blue-500 w-8 h-8 text-xs">SC</div>
-                                                <div class="flex-1">
-                                                    <div class="flex justify-between text-xs mb-1"><span class="font-semibold text-dark">Sarah Chen</span><span class="text-gray-400">11/12 tasks</span></div>
-                                                    <div class="h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-primary rounded-full" style="width:91%"></div></div>
-                                                </div>
-                                            </div>
-                                            <div class="flex items-center gap-3">
-                                                <div class="mock-avatar bg-purple-500 w-8 h-8 text-xs">AR</div>
-                                                <div class="flex-1">
-                                                    <div class="flex justify-between text-xs mb-1"><span class="font-semibold text-dark">Alex Rivera</span><span class="text-gray-400">8/10 tasks</span></div>
-                                                    <div class="h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-purple-400 rounded-full" style="width:80%"></div></div>
-                                                </div>
-                                            </div>
-                                            <div class="flex items-center gap-3">
-                                                <div class="mock-avatar bg-emerald-500 w-8 h-8 text-xs">MK</div>
-                                                <div class="flex-1">
-                                                    <div class="flex justify-between text-xs mb-1"><span class="font-semibold text-dark">Mark Kim</span><span class="text-gray-400">6/9 tasks</span></div>
-                                                    <div class="h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-emerald-400 rounded-full" style="width:67%"></div></div>
-                                                </div>
-                                            </div>
-                                            <div class="flex items-center gap-3">
-                                                <div class="mock-avatar bg-amber-500 w-8 h-8 text-xs">TJ</div>
-                                                <div class="flex-1">
-                                                    <div class="flex justify-between text-xs mb-1"><span class="font-semibold text-dark">Tanya J.</span><span class="text-gray-400">5/8 tasks</span></div>
-                                                    <div class="h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-amber-400 rounded-full" style="width:62%"></div></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="mt-5 p-3 bg-primary/5 rounded-xl border border-primary/10 flex items-center gap-3">
-                                            <i class="fas fa-trophy text-amber-500"></i>
-                                            <p class="text-xs text-gray-600">Sarah Chen is the top performer this week 🎉</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <p class="text-center text-gray-500 text-sm mt-4 font-medium">Track team productivity in real time</p>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <!-- Dots navigation -->
-                    <div class="flex justify-center items-center gap-2 mt-6" id="carousel-dots">
-                        <button class="mockup-dot active" data-index="0"></button>
-                        <button class="mockup-dot" data-index="1"></button>
-                        <button class="mockup-dot" data-index="2"></button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ======== EARLY ACCESS SECTION ======== -->
-        <section id="early-access" class="ea-section py-20">
-            <div class="container mx-auto px-4 relative z-10">
-                <div class="max-w-2xl mx-auto text-center">
-                    <!-- Badge -->
-                    <div class="inline-flex items-center gap-2 ea-badge text-white/90 text-sm font-semibold px-5 py-2 rounded-full mb-8">
-                        <i class="fas fa-rocket text-xs"></i>
-                        Early Access — Limited Spots Available
-                    </div>
-
-                    <h2 class="text-4xl md:text-5xl font-bold text-white mb-5 leading-tight">
-                        Be First to<br>Transform Your Meetings
-                    </h2>
-                    <p class="text-white/75 text-lg mb-10 max-w-lg mx-auto">
-                        Join the waitlist and get exclusive early access, a free extended trial, and direct input into what we build next.
-                    </p>
-
-                    <!-- Email form -->
-                    <form id="early-access-form" class="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto mb-8">
-                        <input
-                            type="email"
-                            id="ea-email"
-                            placeholder="Enter your work email..."
-                            class="email-input flex-1 px-5 py-4 rounded-xl text-sm font-medium"
-                            required
-                        >
-                        <button type="submit" id="ea-submit" class="ea-btn px-7 py-4 rounded-xl text-sm whitespace-nowrap">
-                            <span id="ea-btn-text">Get Early Access →</span>
-                            <span id="ea-btn-loading" class="hidden"><i class="fas fa-circle-notch fa-spin mr-1"></i>Sending...</span>
-                        </button>
-                    </form>
-
-                    <!-- Social proof pills -->
-                    <div class="flex flex-wrap justify-center gap-3">
-                        <div class="counter-pill text-white/80 text-xs px-4 py-2 rounded-full flex items-center gap-2">
-                            <i class="fas fa-users text-white/60"></i>
-                            340+ on waitlist
-                        </div>
-                        <div class="counter-pill text-white/80 text-xs px-4 py-2 rounded-full flex items-center gap-2">
-                            <i class="fas fa-lock text-white/60"></i>
-                            No spam, ever
-                        </div>
-                        <div class="counter-pill text-white/80 text-xs px-4 py-2 rounded-full flex items-center gap-2">
-                            <i class="fas fa-gift text-white/60"></i>
-                            Free extended trial
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Decorative blobs -->
-            <div class="absolute top-0 left-0 w-80 h-80 rounded-full bg-white/5 blur-3xl pointer-events-none"></div>
-            <div class="absolute bottom-0 right-0 w-96 h-96 rounded-full bg-white/5 blur-3xl pointer-events-none"></div>
-        </section>
-
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-dark text-white pt-12 pb-8">
-        <div class="container mx-auto px-4">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12">
-                <div class="mb-8 md:mb-0">
-                    <div class="flex items-center space-x-2 mb-4">
-                        <div class="w-8 h-8 rounded-lg bg-gradient-primary flex items-center justify-center">
-                            <span class="text-white font-bold text-lg">T</span>
-                        </div>
-                        <span class="text-xl font-bold text-white">Taskly<span class="text-accent">Meet</span></span>
-                    </div>
-                    <p class="text-gray-400 max-w-md text-sm leading-relaxed">Turn meetings into summaries and tasks automatically. Boost team productivity with AI-powered meeting intelligence.</p>
-                </div>
-
-                <div class="flex flex-col sm:flex-row gap-8">
-                    <div>
-                        <h3 class="font-bold text-white mb-4 text-sm">Contact</h3>
-                        <ul id="contact-list" class="space-y-2 text-gray-400 text-sm"></ul>
-                    </div>
-                    <div>
-                        <h3 class="font-bold text-white mb-4 text-sm">Company</h3>
-                        <ul id="company-links" class="space-y-2 text-gray-400 text-sm"></ul>
-                    </div>
-                    <div>
-                        <h3 class="font-bold text-white mb-4 text-sm">Legal</h3>
-                        <ul id="legal-links" class="space-y-2 text-gray-400 text-sm"></ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="border-t border-gray-800 pt-8">
-                <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-                    <p class="text-gray-500 text-sm">© 2025 TasklyMeet. All rights reserved.</p>
-                    <div class="flex items-center gap-6">
-                        <div class="flex space-x-4">
-                            <a href="#" class="text-gray-500 hover:text-white transition-colors"><i class="fab fa-twitter text-xl"></i></a>
-                            <a href="#" class="text-gray-500 hover:text-white transition-colors"><i class="fab fa-linkedin text-xl"></i></a>
-                            <a href="#" class="text-gray-500 hover:text-white transition-colors"><i class="fab fa-instagram text-xl"></i></a>
-                        </div>
-                        <a href="#early-access" class="btn-primary px-5 py-2 rounded-lg font-semibold text-white text-sm hidden md:inline-block">Get Early Access</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Toast notification -->
-    <div id="toast" class="bg-white rounded-2xl shadow-hard border border-gray-100 px-5 py-4 flex items-center gap-4 max-w-xs">
-        <div class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center flex-shrink-0">
-            <i class="fas fa-check text-green-600"></i>
-        </div>
-        <div>
-            <p class="font-bold text-dark text-sm">You're on the list! 🎉</p>
-            <p class="text-gray-500 text-xs mt-0.5">We'll reach out when early access opens.</p>
         </div>
     </div>
+</section>
 
-    <script>
-        // =========== DATA ===========
-        const navigationData = [
-            { label: "Features", href: "#features", icon: "fas fa-star" },
-            { label: "How It Works", href: "#how-it-works", icon: "fas fa-play-circle" },
-            { label: "Early Access", href: "#early-access", icon: "fas fa-rocket" },
-        ];
+<!-- ======== SOCIAL PROOF STRIP ======== -->
+<div class="proof-strip">
+    <div class="container mx-auto px-6">
+        <div class="proof-inner">
+            <span class="proof-label">Trusted by teams using</span>
+            <div class="proof-logos">
+                <span><i class="fab fa-slack"></i> Slack</span>
+                <span class="proof-sep">·</span>
+                <span><i class="fab fa-google"></i> Google Meet</span>
+                <span class="proof-sep">·</span>
+                <span><i class="fas fa-video"></i> Zoom</span>
+                <span class="proof-sep">·</span>
+                <span><i class="fab fa-jira"></i> Jira</span>
+                <span class="proof-sep">·</span>
+                <span><i class="fas fa-tasks"></i> Asana</span>
+                <span class="proof-sep">·</span>
+                <span><i class="fab fa-microsoft"></i> Teams</span>
+            </div>
+        </div>
+    </div>
+</div>
 
-        const taskCardsData = [
-            { title: "Update Q3 roadmap", assignee: "Sarah Chen", due: "Tomorrow", priority: "high", color: "bg-red-100", textColor: "text-red-800" },
-            { title: "Review design mockups", assignee: "Alex Rivera", due: "Friday", priority: "medium", color: "bg-yellow-100", textColor: "text-yellow-800" },
-        ];
-
-        const stepsData = [
-            { number: "1", title: "Connect Your Meeting", description: "Connect TasklyMeet to your calendar or join via Zoom, Google Meet, or Microsoft Teams.", icon: "fas fa-plug" },
-            { number: "2", title: "Automatic Summary", description: "Our AI listens and generates a comprehensive meeting summary with key points and decisions.", icon: "fas fa-file-alt" },
-            { number: "3", title: "Tasks Ready", description: "Action items are automatically created as tasks with assignees and due dates.", icon: "fas fa-check-circle" }
-        ];
-
-        const featuresData = [
-            { title: "Automatic Summaries", description: "AI-powered meeting summaries with key decisions, action items, and follow-ups.", icon: "fas fa-robot", color: "bg-blue-50", iconColor: "text-primary" },
-            { title: "Task Creation", description: "Convert discussions into actionable tasks with assignees, priorities, and deadlines.", icon: "fas fa-tasks", color: "bg-purple-50", iconColor: "text-purple-600" },
-            { title: "Integrations", description: "Connect with Slack, Asana, Jira, Trello, and 20+ other tools your team already uses.", icon: "fas fa-puzzle-piece", color: "bg-green-50", iconColor: "text-green-600" },
-            { title: "Collaboration", description: "Share summaries, comment on tasks, and keep everyone aligned in one place.", icon: "fas fa-users", color: "bg-orange-50", iconColor: "text-orange-600" }
-        ];
-
-        const contactData = [
-            { label: "hello@tasklymeet.com", icon: "fas fa-envelope", href: "mailto:hello@tasklymeet.com" },
-            { label: "+1 (555) 123-4567", icon: "fas fa-phone", href: "tel:+15551234567" },
-            { label: "San Francisco, CA", icon: "fas fa-map-marker-alt", href: "#" }
-        ];
-
-        const companyLinksData = [
-            { label: "About Us", href: "#" },
-            { label: "Careers", href: "#" },
-            { label: "Blog", href: "#" },
-        ];
-
-        const legalLinksData = [
-            { label: "Privacy Policy", href: "#" },
-            { label: "Terms of Service", href: "#" },
-            { label: "Cookie Policy", href: "#" },
-        ];
-
-        // =========== RENDER ===========
-        function renderNavigation(items) {
-            return items.map(item =>
-                `<li><a href="${item.href}" class="text-gray-700 hover:text-primary font-medium transition-colors flex items-center space-x-1"><i class="${item.icon} text-sm"></i><span>${item.label}</span></a></li>`
-            ).join("");
-        }
-
-        function renderTaskCards(items) {
-            return items.map(item =>
-                `<div class="bg-white rounded-xl p-3.5 border border-gray-100 shadow-sm">
-                    <div class="flex justify-between items-start mb-2">
-                        <h4 class="font-semibold text-dark text-sm">${item.title}</h4>
-                        <span class="text-xs px-2 py-0.5 rounded-full ${item.color} ${item.textColor} font-semibold">${item.priority}</span>
+<!-- ======== PROBLEM → SOLUTION ======== -->
+<section class="problem-section" id="problem">
+    <div class="container mx-auto px-6">
+        <div class="ps-grid">
+            <div class="ps-problem reveal">
+                <div class="section-eyebrow bad">The Problem</div>
+                <h2 class="section-heading">Meetings end.<br>Clarity doesn't.</h2>
+                <div class="problem-list">
+                    <div class="prob-item">
+                        <i class="fas fa-times-circle"></i>
+                        <span>Decisions get forgotten within hours</span>
                     </div>
-                    <div class="flex justify-between text-xs text-gray-400">
-                        <span><i class="fas fa-user mr-1"></i>${item.assignee}</span>
-                        <span><i class="far fa-clock mr-1"></i>Due ${item.due}</span>
+                    <div class="prob-item">
+                        <i class="fas fa-times-circle"></i>
+                        <span>No one knows who owns what</span>
                     </div>
-                </div>`
-            ).join("");
-        }
-
-        function renderSteps(items) {
-            return items.map((item, i) =>
-                `<div class="text-center card-hover bg-white rounded-2xl p-8 border border-gray-100 shadow-soft reveal" style="transition-delay:${i * 0.1}s">
-                    <div class="step-number rounded-full flex items-center justify-center mx-auto mb-6 text-sm">${item.number}</div>
-                    <div class="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-5">
-                        <i class="${item.icon} text-primary text-2xl"></i>
+                    <div class="prob-item">
+                        <i class="fas fa-times-circle"></i>
+                        <span>Tasks aren't tracked anywhere</span>
                     </div>
-                    <h3 class="text-xl font-bold text-dark mb-3">${item.title}</h3>
-                    <p class="text-gray-600 text-sm leading-relaxed">${item.description}</p>
-                </div>`
-            ).join("");
-        }
-
-        function renderFeatures(items) {
-            return items.map((item, i) =>
-                `<div class="card-hover bg-white rounded-2xl p-6 border border-gray-100 shadow-soft reveal" style="transition-delay:${i * 0.08}s">
-                    <div class="w-12 h-12 rounded-xl ${item.color} flex items-center justify-center mb-5">
-                        <i class="${item.icon} ${item.iconColor} text-xl"></i>
+                    <div class="prob-item">
+                        <i class="fas fa-times-circle"></i>
+                        <span>Teams repeat the same conversations</span>
                     </div>
-                    <h3 class="text-lg font-bold text-dark mb-2">${item.title}</h3>
-                    <p class="text-gray-600 text-sm leading-relaxed">${item.description}</p>
-                </div>`
-            ).join("");
-        }
+                </div>
+            </div>
 
-        function renderContactList(items) {
-            return items.map(item =>
-                `<li class="flex items-center space-x-3">
-                    <i class="${item.icon} text-gray-500 w-4"></i>
-                    <a href="${item.href}" class="hover:text-white transition-colors">${item.label}</a>
-                </li>`
-            ).join("");
-        }
+            <div class="ps-divider reveal" style="--delay:.2s">
+                <div class="divider-arrow">→</div>
+            </div>
 
-        function renderLinkList(items) {
-            return items.map(item =>
-                `<li><a href="${item.href}" class="hover:text-white transition-colors">${item.label}</a></li>`
-            ).join("");
-        }
+            <div class="ps-solution reveal" style="--delay:.3s">
+                <div class="section-eyebrow good">The Solution</div>
+                <h2 class="section-heading">TasklyMeet handles the rest.</h2>
+                <div class="solution-list">
+                    <div class="sol-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Every decision captured automatically</span>
+                    </div>
+                    <div class="sol-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Tasks assigned with owners & deadlines</span>
+                    </div>
+                    <div class="sol-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Synced instantly to your tools</span>
+                    </div>
+                    <div class="sol-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Your whole team stays aligned</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-        // =========== CAROUSEL ===========
-        let currentSlide = 0;
-        const totalSlides = 3;
-        let carouselTimer;
+<!-- ======== HOW IT WORKS ======== -->
+<section id="how-it-works" class="hiw-section">
+    <div class="container mx-auto px-6">
+        <div class="section-header reveal">
+            <div class="section-eyebrow">How It Works</div>
+            <h2 class="section-heading">Three steps to meeting clarity</h2>
+        </div>
+        <div id="steps-container" class="steps-grid"></div>
+    </div>
+</section>
 
-        function goToSlide(index) {
-            currentSlide = index;
-            document.getElementById('mockup-track').style.transform = `translateX(-${index * 100}%)`;
-            document.querySelectorAll('.mockup-dot').forEach((dot, i) => {
-                dot.classList.toggle('active', i === index);
-            });
-        }
+<!-- ======== FEATURES ======== -->
+<section id="features" class="features-section">
+    <div class="container mx-auto px-6">
+        <div class="section-header reveal">
+            <div class="section-eyebrow">Features</div>
+            <h2 class="section-heading">Built around outcomes, not notes</h2>
+            <p class="section-sub">Everything your team needs to close the loop on every meeting.</p>
+        </div>
+        <div id="features-grid" class="features-grid"></div>
+    </div>
+</section>
 
-        function startCarouselTimer() {
-            carouselTimer = setInterval(() => {
-                goToSlide((currentSlide + 1) % totalSlides);
-            }, 4000);
-        }
+<!-- ======== PRODUCT SHOWCASE ======== -->
+<section class="showcase-section" id="product">
+    <div class="container mx-auto px-6">
+        <div class="section-header reveal">
+            <div class="section-eyebrow">Product</div>
+            <h2 class="section-heading">See it in action</h2>
+        </div>
 
-        // =========== TELEGRAM SUBMISSION ===========
-        // ⚠️ REPLACE with your bot token and chat id:
-        const TG_BOT_TOKEN = '8646268760:AAGtcY8y4HTyIx8cSenZ8gkMGI2yaquX_RM';
-        const TG_CHAT_ID = '8535752782';
+        <div class="showcase-wrap reveal" style="--delay:.1s">
+            <div class="mockup-viewport">
+                <div class="mockup-track" id="mockup-track"></div>
+            </div>
+            <div class="carousel-dots" id="carousel-dots">
+                <button class="mockup-dot active" data-index="0">Summary</button>
+                <button class="mockup-dot" data-index="1">Integrations</button>
+                <button class="mockup-dot" data-index="2">Team View</button>
+            </div>
+        </div>
+    </div>
+</section>
 
-        async function sendToTelegram(email) {
-            const text = `🚀 *New Early Access Signup!*\n\n📧 Email: \`${email}\`\n⏰ Time: ${new Date().toLocaleString('ru-RU', { timeZone: 'Europe/Moscow' })}\n🌐 Source: TasklyMeet Landing`;
-            const url = `https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`;
-            const resp = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: TG_CHAT_ID, text, parse_mode: 'Markdown' })
-            });
-            if (!resp.ok) throw new Error('Telegram error');
-        }
+<!-- ======== USE CASES ======== -->
+<section class="usecases-section">
+    <div class="container mx-auto px-6">
+        <div class="section-header reveal">
+            <div class="section-eyebrow">Who It's For</div>
+            <h2 class="section-heading">Made for fast-moving teams</h2>
+        </div>
+        <div class="usecases-grid">
+            <div class="usecase-card reveal">
+                <div class="uc-icon"><i class="fas fa-rocket"></i></div>
+                <h3>Founders & Startups</h3>
+                <p>Move fast without losing context. Every standup and investor call becomes a structured action plan.</p>
+            </div>
+            <div class="usecase-card reveal" style="--delay:.1s">
+                <div class="uc-icon"><i class="fas fa-layer-group"></i></div>
+                <h3>Product Teams</h3>
+                <p>Turn sprint reviews, discovery calls, and retros into tracked tasks — automatically.</p>
+            </div>
+            <div class="usecase-card reveal" style="--delay:.2s">
+                <div class="uc-icon"><i class="fas fa-handshake"></i></div>
+                <h3>Sales & CS Teams</h3>
+                <p>Never miss a follow-up. Every client call generates a summary and CRM-ready next steps.</p>
+            </div>
+            <div class="usecase-card reveal" style="--delay:.3s">
+                <div class="uc-icon"><i class="fas fa-users-cog"></i></div>
+                <h3>Operations & HR</h3>
+                <p>All-hands, onboarding, and planning sessions — documented and delegated in seconds.</p>
+            </div>
+        </div>
+    </div>
+</section>
 
-        function showToast() {
-            const toast = document.getElementById('toast');
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 5000);
-        }
+<!-- ======== EARLY ACCESS ======== -->
+<section id="early-access" class="ea-section">
+    <div class="ea-grid-bg"></div>
+    <div class="ea-orb ea-orb-1"></div>
+    <div class="ea-orb ea-orb-2"></div>
 
-        // =========== SCROLL REVEAL ===========
-        function initReveal() {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
-            }, { threshold: 0.1 });
+    <div class="container mx-auto px-6 relative z-10">
+        <div class="ea-inner reveal">
+            <div class="section-eyebrow light">Early Access</div>
+            <h2 class="ea-heading">Be First to Transform<br>Your Meetings</h2>
+            <p class="ea-sub">Join the waitlist and get exclusive early access, an extended free trial, and direct input into what we build next.</p>
 
-            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-        }
+            <form id="early-access-form" class="ea-form">
+                <div class="ea-input-wrap">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="ea-email" placeholder="Enter your work email" required>
+                </div>
+                <button type="submit" id="ea-submit">
+                    <span id="ea-btn-text">Get Early Access →</span>
+                    <span id="ea-btn-loading" class="hidden"><i class="fas fa-circle-notch fa-spin"></i> Sending...</span>
+                </button>
+            </form>
 
-        // =========== INIT ===========
-        document.addEventListener('DOMContentLoaded', function () {
-            document.getElementById('nav-menu').innerHTML = renderNavigation(navigationData);
-            document.getElementById('mobile-nav-menu').innerHTML = renderNavigation(navigationData);
-            document.getElementById('task-cards-preview').innerHTML = renderTaskCards(taskCardsData);
-            document.getElementById('steps-container').innerHTML = renderSteps(stepsData);
-            document.getElementById('features-grid').innerHTML = renderFeatures(featuresData);
-            document.getElementById('contact-list').innerHTML = renderContactList(contactData);
-            document.getElementById('company-links').innerHTML = renderLinkList(companyLinksData);
-            document.getElementById('legal-links').innerHTML = renderLinkList(legalLinksData);
+            <div class="ea-pills">
+                <div class="ea-pill"><i class="fas fa-users"></i> 340+ on waitlist</div>
+                <div class="ea-pill"><i class="fas fa-shield-alt"></i> No spam, ever</div>
+                <div class="ea-pill"><i class="fas fa-gift"></i> Free extended trial</div>
+                <div class="ea-pill"><i class="fas fa-star"></i> Priority access</div>
+            </div>
+        </div>
+    </div>
+</section>
 
-            // Re-observe after render
-            setTimeout(initReveal, 50);
+</main>
 
-            // Carousel
-            document.querySelectorAll('.mockup-dot').forEach(dot => {
-                dot.addEventListener('click', () => {
-                    clearInterval(carouselTimer);
-                    goToSlide(parseInt(dot.dataset.index));
-                    startCarouselTimer();
-                });
-            });
-            startCarouselTimer();
+<!-- ======== FOOTER ======== -->
+<footer class="site-footer">
+    <div class="container mx-auto px-6">
+        <div class="footer-top">
+            <div class="footer-brand">
+                <div class="logo-wrap">
+                    <div class="logo-icon small"><svg width="14" height="14" viewBox="0 0 18 18" fill="none"><path d="M2 9L7 14L16 4" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                    <span class="logo-text">Taskly<span>Meet</span></span>
+                </div>
+                <p class="footer-tagline">Turn meetings into action, automatically. AI-powered meeting intelligence for modern teams.</p>
+            </div>
+            <div class="footer-links-group">
+                <div>
+                    <h4>Contact</h4>
+                    <ul id="contact-list"></ul>
+                </div>
+                <div>
+                    <h4>Company</h4>
+                    <ul id="company-links"></ul>
+                </div>
+                <div>
+                    <h4>Legal</h4>
+                    <ul id="legal-links"></ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2025 TasklyMeet. All rights reserved.</span>
+            <div class="footer-social">
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </div>
+</footer>
 
-            // Mobile menu
-            const toggle = document.getElementById('mobile-menu-toggle');
-            const mobileMenu = document.getElementById('mobile-menu');
-            toggle.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-                const icon = toggle.querySelector('i');
-                icon.classList.toggle('fa-bars');
-                icon.classList.toggle('fa-times');
-            });
+<!-- ======== TOAST ======== -->
+<div id="toast">
+    <div class="toast-icon"><i class="fas fa-check"></i></div>
+    <div>
+        <div class="toast-title">You're on the list! 🎉</div>
+        <div class="toast-sub">We'll reach out when early access opens.</div>
+    </div>
+</div>
 
-            // Smooth scroll
-            document.addEventListener('click', function (event) {
-                const link = event.target.closest('a[href^="#"]');
-                if (!link) return;
-                const href = link.getAttribute('href');
-                if (href === '#') return;
-                event.preventDefault();
-                const target = document.querySelector(href);
-                if (target) {
-                    if (!mobileMenu.classList.contains('hidden')) {
-                        mobileMenu.classList.add('hidden');
-                        const icon = toggle.querySelector('i');
-                        icon.classList.add('fa-bars');
-                        icon.classList.remove('fa-times');
-                    }
-                    window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' });
-                }
-            });
-
-            // Form submit
-            document.getElementById('early-access-form').addEventListener('submit', async function (e) {
-                e.preventDefault();
-                const email = document.getElementById('ea-email').value.trim();
-                if (!email) return;
-
-                const btn = document.getElementById('ea-submit');
-                const btnText = document.getElementById('ea-btn-text');
-                const btnLoading = document.getElementById('ea-btn-loading');
-
-                btn.disabled = true;
-                btnText.classList.add('hidden');
-                btnLoading.classList.remove('hidden');
-
-                try {
-                    await sendToTelegram(email);
-                } catch (err) {
-                    // Fail silently — still show success to user
-                    console.warn('Telegram send failed:', err);
-                }
-
-                btnText.classList.remove('hidden');
-                btnLoading.classList.add('hidden');
-                btn.disabled = false;
-
-                document.getElementById('ea-email').value = '';
-                showToast();
-            });
-        });
-    </script>
+<script src="main.js"></script>
 </body>
 </html>
