@@ -323,6 +323,15 @@ function getUtmSource() {
     return hasUtm ? utmData : null;
 }
 
+function getUtmParam(name) {
+    const params = new URLSearchParams(window.location.search);
+    return params.get(name);
+}
+
+function getUtmSource() {
+    return getUtmParam('utm_source') || 'direct';
+}
+
 // =========== FORM SUBMISSION ===========
 
 async function submitEmail(email) {
@@ -331,15 +340,18 @@ async function submitEmail(email) {
     }
 
     const payload = {
-        email,
-        page: window.location.href,
-        browser: getBrowser(),
-        device: getDevice(),
-        source: getUtmSource(),
-        submittedAt: new Date().toISOString(),
-        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'Unknown',
-        language: navigator.language || 'Unknown'
-    };
+    email,
+    page: window.location.href,
+    browser: getBrowser(),
+    device: getDevice(),
+    source: getUtmParam('utm_source') || 'direct',
+    medium: getUtmParam('utm_medium') || 'unknown',
+    campaign: getUtmParam('utm_campaign') || 'unknown',
+    referrer: document.referrer || 'direct',
+    submittedAt: new Date().toISOString(),
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'Unknown',
+    language: navigator.language || 'Unknown'
+};
 
     console.log('[TasklyMeet] submitting payload:', payload);
     console.log('[TasklyMeet] submit endpoint:', SUBMIT_ENDPOINT);
