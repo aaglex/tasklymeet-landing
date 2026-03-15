@@ -80,6 +80,10 @@ const legalLinksData = [
     { label: "Cookie Policy",    href: "#" },
 ];
 
+// =========== CONFIG ===========
+
+const SUBMIT_ENDPOINT = "https://tasklymeet-waitlist.bgfbtxd68t.workers.dev";
+
 // =========== RENDER ===========
 
 function renderNavLinks(items, mobile = false) {
@@ -142,7 +146,6 @@ function renderLinkList(items) {
 
 function buildCarouselSlides() {
     const slides = [
-        // Slide 1: Summary
         `<div class="mockup-slide">
             <div class="mock-bar">
                 <div class="mock-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
@@ -163,7 +166,6 @@ function buildCarouselSlides() {
             </div>
         </div>`,
 
-        // Slide 2: Integrations
         `<div class="mockup-slide">
             <div class="mock-bar">
                 <div class="mock-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
@@ -190,7 +192,6 @@ function buildCarouselSlides() {
             </div>
         </div>`,
 
-        // Slide 3: Team
         `<div class="mockup-slide">
             <div class="mock-bar">
                 <div class="mock-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
@@ -252,7 +253,6 @@ function initStickyHeader() {
             header.classList.remove('scrolled');
         }
 
-        // Hide on scroll down, show on scroll up
         if (y > lastY && y > 120) {
             header.classList.add('hidden-header');
         } else {
@@ -285,42 +285,72 @@ function showToast() {
     setTimeout(() => toast.classList.remove('show'), 5000);
 }
 
+// =========== LEAD DATA HELPERS ===========
+
+function getBrowser() {
+    const ua = navigator.userAgent;
+
+    if (ua.includes('Edg/')) return 'Edge';
+    if (ua.includes('OPR/') || ua.includes('Opera')) return 'Opera';
+    if (ua.includes('Chrome/') && !ua.includes('Edg/')) return 'Chrome';
+    if (ua.includes('Firefox/')) return 'Firefox';
+    if (ua.includes('Safari/') && !ua.includes('Chrome/')) return 'Safari';
+
+    return 'Unknown';
+}
+
+function getDevice() {
+    const ua = navigator.userAgent;
+
+    if (/tablet|ipad/i.test(ua)) return 'Tablet';
+    if (/mobi|android|iphone|ipod/i.test(ua)) return 'Mobile';
+
+    return 'Desktop';
+}
+
+function getUtmSource() {
+    const params = new URLSearchParams(window.location.search);
+    const utmData = {
+        source: params.get('utm_source') || '',
+        medium: params.get('utm_medium') || '',
+        campaign: params.get('utm_campaign') || '',
+        term: params.get('utm_term') || '',
+        content: params.get('utm_content') || '',
+        referrer: document.referrer || ''
+    };
+
+    const hasUtm = Object.values(utmData).some(Boolean);
+    return hasUtm ? utmData : null;
+}
+
 // =========== FORM SUBMISSION ===========
-// ВСТАВЬ СВОИ ДАННЫЕ НИЖЕ
-// @BotFather -> токен бота
-// chat id можно узнать через @userinfobot или через getUpdates
-const TELEGRAM_BOT_TOKEN = '8646268760:AAGtcY8y4HTyIx8cSenZ8gkMGI2yaquX_RM';
-const TELEGRAM_CHAT_ID = '8535752782';
 
 async function submitEmail(email) {
-    if (!TELEGRAM_BOT_TOKEN || TELEGRAM_BOT_TOKEN === 'PASTE_YOUR_BOT_TOKEN_HERE') {
-        throw new Error('Telegram bot token is not configured');
+    if (!SUBMIT_ENDPOINT || SUBMIT_ENDPOINT.includes('YOUR-WORKER-NAME')) {
+        throw new Error('SUBMIT_ENDPOINT is not configured');
     }
 
-    if (!TELEGRAM_CHAT_ID || TELEGRAM_CHAT_ID === 'PASTE_YOUR_CHAT_ID_HERE') {
-        throw new Error('Telegram chat id is not configured');
-    }
+    const payload = {
+        email,
+        page: window.location.href,
+        browser: getBrowser(),
+        device: getDevice(),
+        source: getUtmSource(),
+        submittedAt: new Date().toISOString(),
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'Unknown',
+        language: navigator.language || 'Unknown'
+    };
 
-    const message = [
-        '🔥 New TasklyMeet waitlist signup',
-        `Email: ${email}`,
-        `Time: ${new Date().toLocaleString()}`,
-        `Page: ${window.location.href}`
-    ].join('\n');
-
-    const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+    const response = await fetch(SUBMIT_ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            chat_id: TELEGRAM_CHAT_ID,
-            text: message
-        })
+        body: JSON.stringify(payload)
     });
 
-    const data = await response.json();
+    const data = await response.json().catch(() => ({}));
 
     if (!response.ok || !data.ok) {
-        throw new Error(data.description || 'Telegram sendMessage failed');
+        throw new Error(data.error || 'Lead submission failed');
     }
 
     return data;
@@ -341,58 +371,42 @@ function initMobileMenu() {
 // =========== INIT ===========
 
 document.addEventListener('DOMContentLoaded', function () {
-
-    // Render nav
     document.getElementById('nav-menu').innerHTML        = renderNavLinks(navigationData);
     document.getElementById('mobile-nav-menu').innerHTML = renderNavLinks(navigationData, true);
-
-    // Hero mockup task cards
     document.getElementById('task-cards-preview').innerHTML = renderTaskCards(taskCardsData);
-
-    // How It Works
     document.getElementById('steps-container').innerHTML = renderSteps(stepsData);
-
-    // Features
     document.getElementById('features-grid').innerHTML = renderFeatures(featuresData);
-
-    // Footer
     document.getElementById('contact-list').innerHTML  = renderContactList(contactData);
     document.getElementById('company-links').innerHTML = renderLinkList(companyLinksData);
     document.getElementById('legal-links').innerHTML   = renderLinkList(legalLinksData);
-
-    // Carousel
     document.getElementById('mockup-track').innerHTML = buildCarouselSlides();
+
     document.querySelectorAll('.mockup-dot').forEach(dot => {
         dot.addEventListener('click', () => {
             clearInterval(carouselTimer);
-            goToSlide(parseInt(dot.dataset.index));
+            goToSlide(parseInt(dot.dataset.index, 10));
             startCarousel();
         });
     });
+
     startCarousel();
-
-    // Header
     initStickyHeader();
-
-    // Mobile menu
     initMobileMenu();
-
-    // Scroll reveal (defer slightly to let dynamic content render)
     setTimeout(initReveal, 60);
 
-    // Smooth scroll
     document.addEventListener('click', function (e) {
         const link = e.target.closest('a[href^="#"]');
         if (!link) return;
+
         const href = link.getAttribute('href');
         if (href === '#') return;
+
         e.preventDefault();
         const target = document.querySelector(href);
         if (!target) return;
 
-        // Close mobile menu
         const mobileMenu = document.getElementById('mobile-menu');
-        const toggle     = document.getElementById('mobile-menu-toggle');
+        const toggle = document.getElementById('mobile-menu-toggle');
         if (mobileMenu.classList.contains('open')) {
             mobileMenu.classList.remove('open');
             toggle.classList.remove('open');
@@ -401,14 +415,13 @@ document.addEventListener('DOMContentLoaded', function () {
         window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' });
     });
 
-    // Early access form
     document.getElementById('early-access-form').addEventListener('submit', async function (e) {
         e.preventDefault();
 
-        const email   = document.getElementById('ea-email').value.trim();
+        const email = document.getElementById('ea-email').value.trim();
         if (!email) return;
 
-        const btn     = document.getElementById('ea-submit');
+        const btn = document.getElementById('ea-submit');
         const btnText = document.getElementById('ea-btn-text');
         const btnLoad = document.getElementById('ea-btn-loading');
 
@@ -422,11 +435,11 @@ document.addEventListener('DOMContentLoaded', function () {
             showToast();
         } catch (err) {
             console.warn('Submission error:', err);
-            alert('Could not send email to Telegram. Check bot token and chat id in main.js');
+            alert(err.message || 'Could not submit email. Check your Worker URL and Telegram settings.');
+        } finally {
+            btnText.classList.remove('hidden');
+            btnLoad.classList.add('hidden');
+            btn.disabled = false;
         }
-
-        btnText.classList.remove('hidden');
-        btnLoad.classList.add('hidden');
-        btn.disabled = false;
     });
 });
