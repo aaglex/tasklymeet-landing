@@ -286,26 +286,44 @@ function showToast() {
 }
 
 // =========== FORM SUBMISSION ===========
-// ⚠️ SECURITY NOTE: Telegram bot token has been removed from client-side code.
-// To receive submissions, implement a serverless endpoint (e.g. Vercel Function,
-// Netlify Function, or Cloudflare Worker) that securely handles the Telegram API call.
-// Then update SUBMIT_ENDPOINT below to point to your backend.
-
-const SUBMIT_ENDPOINT = '/api/subscribe'; // ← replace with your serverless endpoint
+// ВСТАВЬ СВОИ ДАННЫЕ НИЖЕ
+// @BotFather -> токен бота
+// chat id можно узнать через @userinfobot или через getUpdates
+const TELEGRAM_BOT_TOKEN = '8646268760:AAGtcY8y4HTyIx8cSenZ8gkMGI2yaquX_RM';
+const TELEGRAM_CHAT_ID = '8535752782';
 
 async function submitEmail(email) {
-    // Option A: POST to your own serverless endpoint (recommended)
-    // const res = await fetch(SUBMIT_ENDPOINT, {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify({ email }),
-    // });
-    // if (!res.ok) throw new Error('Submission failed');
+    if (!TELEGRAM_BOT_TOKEN || TELEGRAM_BOT_TOKEN === 'PASTE_YOUR_BOT_TOKEN_HERE') {
+        throw new Error('Telegram bot token is not configured');
+    }
 
-    // Option B: Temporary local fallback — logs to console only
-    // Remove this when backend is set up
-    console.log('[TasklyMeet] New signup:', email);
-    await new Promise(r => setTimeout(r, 600)); // simulate network delay
+    if (!TELEGRAM_CHAT_ID || TELEGRAM_CHAT_ID === 'PASTE_YOUR_CHAT_ID_HERE') {
+        throw new Error('Telegram chat id is not configured');
+    }
+
+    const message = [
+        '🔥 New TasklyMeet waitlist signup',
+        `Email: ${email}`,
+        `Time: ${new Date().toLocaleString()}`,
+        `Page: ${window.location.href}`
+    ].join('\n');
+
+    const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            chat_id: TELEGRAM_CHAT_ID,
+            text: message
+        })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.ok) {
+        throw new Error(data.description || 'Telegram sendMessage failed');
+    }
+
+    return data;
 }
 
 // =========== MOBILE MENU ===========
@@ -400,15 +418,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
         try {
             await submitEmail(email);
+            document.getElementById('ea-email').value = '';
+            showToast();
         } catch (err) {
             console.warn('Submission error:', err);
+            alert('Could not send email to Telegram. Check bot token and chat id in main.js');
         }
 
         btnText.classList.remove('hidden');
         btnLoad.classList.add('hidden');
         btn.disabled = false;
-
-        document.getElementById('ea-email').value = '';
-        showToast();
     });
 });
