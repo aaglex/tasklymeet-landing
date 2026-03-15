@@ -341,16 +341,27 @@ async function submitEmail(email) {
         language: navigator.language || 'Unknown'
     };
 
+    console.log('[TasklyMeet] submitting payload:', payload);
+    console.log('[TasklyMeet] submit endpoint:', SUBMIT_ENDPOINT);
+
     const response = await fetch(SUBMIT_ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
     });
 
-    const data = await response.json().catch(() => ({}));
+    const rawText = await response.text();
+    console.log('[TasklyMeet] worker raw response:', rawText);
+
+    let data = {};
+    try {
+        data = rawText ? JSON.parse(rawText) : {};
+    } catch (error) {
+        throw new Error(`Worker returned non-JSON: ${rawText}`);
+    }
 
     if (!response.ok || !data.ok) {
-        throw new Error(data.error || 'Lead submission failed');
+        throw new Error(data.error || data.description || `HTTP ${response.status}`);
     }
 
     return data;
@@ -434,8 +445,8 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('ea-email').value = '';
             showToast();
         } catch (err) {
-            console.warn('Submission error:', err);
-            alert(err.message || 'Could not submit email. Check your Worker URL and Telegram settings.');
+            console.error('[TasklyMeet] submission error:', err);
+            alert('Submit failed: ' + (err.message || err));
         } finally {
             btnText.classList.remove('hidden');
             btnLoad.classList.add('hidden');
